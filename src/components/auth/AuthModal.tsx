@@ -48,7 +48,7 @@ export function AuthModal({ isOpen, onClose, defaultMode = 'signin' }: AuthModal
             email, 
             password,
             options: {
-              emailRedirectTo: `${window.location.origin}/dashboard`
+              emailRedirectTo: `${window.location.origin}/auth/confirm`
             }
           })
         : await supabase.auth.signInWithPassword({ email, password })
@@ -57,7 +57,8 @@ export function AuthModal({ isOpen, onClose, defaultMode = 'signin' }: AuthModal
         setError(error.message)
       } else if (isSignUp) {
         setError(null)
-        alert('Check your email for a confirmation link!')
+        alert('Account created! Please check your email for a confirmation link.')
+        onClose()
       } else {
         onClose()
         navigate('/operations')

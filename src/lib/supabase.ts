@@ -32,7 +32,7 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: false // Set to false for SSR
+    detectSessionInUrl: true // Enable for email confirmation handling
   },
   db: {
     schema: 'public'
