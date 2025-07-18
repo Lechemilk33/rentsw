@@ -120,3 +120,5 @@ quick-test.*
 setup-test-*
 create-test-*
 update-test-*
+
+.vercel
