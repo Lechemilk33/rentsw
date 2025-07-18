@@ -1,0 +1,408 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* Professional Software Responsive Scaling System */
+:root {
+  /* Base font sizes that scale with viewport */
+  --font-xs: clamp(0.65rem, 0.5vw + 0.5rem, 0.75rem);
+  --font-sm: clamp(0.75rem, 0.5vw + 0.6rem, 0.875rem);
+  --font-base: clamp(0.875rem, 0.5vw + 0.7rem, 1rem);
+  --font-lg: clamp(1rem, 0.5vw + 0.8rem, 1.125rem);
+  --font-xl: clamp(1.125rem, 0.5vw + 0.9rem, 1.25rem);
+  --font-2xl: clamp(1.25rem, 1vw + 0.8rem, 1.5rem);
+  --font-3xl: clamp(1.5rem, 1.5vw + 0.8rem, 1.875rem);
+  
+  /* Adaptive spacing system */
+  --space-xs: clamp(0.25rem, 0.2vw + 0.2rem, 0.5rem);
+  --space-sm: clamp(0.5rem, 0.3vw + 0.4rem, 0.75rem);
+  --space-md: clamp(0.75rem, 0.5vw + 0.5rem, 1rem);
+  --space-lg: clamp(1rem, 0.8vw + 0.6rem, 1.5rem);
+  --space-xl: clamp(1.5rem, 1.2vw + 0.8rem, 2rem);
+  --space-2xl: clamp(2rem, 1.5vw + 1rem, 3rem);
+  
+  /* Button and component sizes */
+  --btn-sm-height: clamp(2rem, 1vw + 1.5rem, 2.25rem);
+  --btn-md-height: clamp(2.25rem, 1vw + 1.75rem, 2.5rem);
+  --btn-lg-height: clamp(2.5rem, 1.2vw + 2rem, 3rem);
+  
+  /* Table row heights */
+  --table-row-height: clamp(3rem, 1.5vw + 2.5rem, 4rem);
+  --table-header-height: clamp(2.5rem, 1vw + 2rem, 3rem);
+}
+
+/* Apply responsive scaling to common elements */
+html {
+  font-size: var(--font-base);
+  line-height: 1.5;
+}
+
+body {
+  @apply bg-white dark:bg-gray-950;
+  font-size: var(--font-base);
+  
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+}
+
+/* Responsive text sizing classes */
+.text-responsive-xs { font-size: var(--font-xs); }
+.text-responsive-sm { font-size: var(--font-sm); }
+.text-responsive-base { font-size: var(--font-base); }
+.text-responsive-lg { font-size: var(--font-lg); }
+.text-responsive-xl { font-size: var(--font-xl); }
+.text-responsive-2xl { font-size: var(--font-2xl); }
+.text-responsive-3xl { font-size: var(--font-3xl); }
+
+/* Responsive spacing classes */
+.p-responsive-sm { padding: var(--space-sm); }
+.p-responsive-md { padding: var(--space-md); }
+.p-responsive-lg { padding: var(--space-lg); }
+.p-responsive-xl { padding: var(--space-xl); }
+
+.px-responsive-sm { padding-left: var(--space-sm); padding-right: var(--space-sm); }
+.px-responsive-md { padding-left: var(--space-md); padding-right: var(--space-md); }
+.py-responsive-sm { padding-top: var(--space-sm); padding-bottom: var(--space-sm); }
+.py-responsive-md { padding-top: var(--space-md); padding-bottom: var(--space-md); }
+
+/* Professional table styling with adaptive sizing */
+.professional-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-sm);
+}
+
+.professional-table thead th {
+  height: var(--table-header-height);
+  padding: var(--space-sm) var(--space-md);
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 500;
+  text-align: left;
+  font-size: var(--font-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+}
+
+.professional-table tbody td {
+  height: var(--table-row-height);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+.professional-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Responsive button scaling */
+.btn-responsive {
+  font-size: var(--font-sm);
+  padding: var(--space-xs) var(--space-md);
+  min-height: var(--btn-sm-height);
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+.btn-responsive-md {
+  font-size: var(--font-base);
+  padding: var(--space-sm) var(--space-lg);
+  min-height: var(--btn-md-height);
+}
+
+.btn-responsive-lg {
+  font-size: var(--font-lg);
+  padding: var(--space-md) var(--space-xl);
+  min-height: var(--btn-lg-height);
+}
+
+/* Responsive layout containers */
+.container-responsive {
+  width: 100%;
+  max-width: 100vw;
+  margin: 0 auto;
+  padding: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    padding: var(--space-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    padding: var(--space-xl);
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-responsive {
+    max-width: 1280px;
+    padding: var(--space-2xl);
+  }
+}
+
+/* Viewport-based minimum sizes for professional software */
+@media (max-width: 768px) {
+  .professional-table {
+    font-size: 0.75rem;
+  }
+  
+  .professional-table thead th,
+  .professional-table tbody td {
+    padding: 0.5rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --font-base: 1.125rem;
+    --space-md: 1.25rem;
+    --table-row-height: 4.5rem;
+  }
+}
+
+@media (min-width: 2560px) {
+  :root {
+    --font-base: 1.25rem;
+    --space-md: 1.5rem;
+    --table-row-height: 5rem;
+  }
+}
+
+/* Enterprise Design System Custom Animations */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes spring-in {
+  0% { transform: scale(0.9) translateY(4px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes spring-out {
+  0% { transform: scale(1) translateY(0); opacity: 1; }
+  100% { transform: scale(0.9) translateY(4px); opacity: 0; }
+}
+
+@keyframes fade-in-up {
+  0% { transform: translateY(16px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fade-out-down {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(16px); opacity: 0; }
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.33); }
+  80%, 100% { opacity: 0; }
+}
+
+@keyframes pulse-dot {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1); }
+  100% { transform: scale(0.8); }
+}
+
+/* Focus ring improvements for accessibility */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
+
+/* Smooth transitions for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .border-gray-300 { @apply border-gray-900; }
+  .text-gray-600 { @apply text-gray-900; }
+  .bg-gray-100 { @apply bg-gray-200; }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+  .dark-mode-invert {
+    filter: invert(1) hue-rotate(180deg);
+  }
+}
+
+/* Custom scrollbar for webkit browsers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-lg;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-lg hover:bg-gray-400;
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Enterprise gradient backgrounds */
+.gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-success {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.gradient-warning {
+  background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);
+}
+
+.gradient-danger {
+  background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+}
+
+/* Text gradients */
+.text-gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Professional button hover effects */
+.btn-lift {
+  transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.btn-lift:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Loading skeleton animation */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Enterprise spacing utilities */
+.space-enterprise > * + * {
+  margin-top: 1.5rem;
+}
+
+.space-enterprise-sm > * + * {
+  margin-top: 1rem;
+}
+
+.space-enterprise-lg > * + * {
+  margin-top: 2rem;
+}
+
+/* Professional typography */
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+/* Enterprise form styling */
+.form-enterprise .form-group {
+  @apply space-y-2;
+}
+
+.form-enterprise label {
+  @apply block text-sm font-medium text-gray-700;
+}
+
+.form-enterprise input,
+.form-enterprise select,
+.form-enterprise textarea {
+  @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200;
+}
+
+/* Accessibility improvements */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* High performance animations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Enterprise color system utilities */
+.bg-enterprise-primary { background-color: #3b82f6; }
+.bg-enterprise-secondary { background-color: #6b7280; }
+.bg-enterprise-success { background-color: #10b981; }
+.bg-enterprise-warning { background-color: #f59e0b; }
+.bg-enterprise-danger { background-color: #ef4444; }
+.bg-enterprise-info { background-color: #06b6d4; }
+
+.text-enterprise-primary { color: #3b82f6; }
+.text-enterprise-secondary { color: #6b7280; }
+.text-enterprise-success { color: #10b981; }
+.text-enterprise-warning { color: #f59e0b; }
+.text-enterprise-danger { color: #ef4444; }
+.text-enterprise-info { color: #06b6d4; }
+
+/* Global Styles */
+.animation-delay-75 {
+  animation-delay: 75ms;
+}
+
+.animation-delay-150 {
+  animation-delay: 150ms;
+}
