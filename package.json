@@ -11,8 +11,6 @@
   "dependencies": {
     "@react-router/node": "^7.5.3",
     "@react-router/serve": "^7.5.3",
-    "@sentry/react": "^9.40.0",
-    "@sentry/remix": "^9.40.0",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.51.0",
