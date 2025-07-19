@@ -34,6 +34,54 @@ export default function ConfirmEmail() {
             setError(error.message)
           } else {
             setSuccess(true)
+            
+            // Create location for new user after successful confirmation
+            try {
+              console.log('🔧 Setting up new user location...')
+              
+              // Get the current user
+              const { data: { user } } = await supabase.auth.getUser()
+              
+              if (user) {
+                // Create a new location for this user
+                const { data: location, error: locationError } = await supabase
+                  .from('locations')
+                  .insert([{
+                    name: `user-location-${user.id}`,
+                    display_name: `${user.email}'s Fleet`,
+                    address: '123 Main Street, City, State 12345',
+                    phone: '+1 (555) 123-4567',
+                    email: user.email
+                  }])
+                  .select()
+                  .single()
+                
+                if (locationError) {
+                  console.error('Error creating location:', locationError)
+                } else {
+                  console.log('✅ Location created:', location.id)
+                  
+                  // Update user metadata with location_id
+                  const { error: updateError } = await supabase.auth.updateUser({
+                    data: {
+                      location_id: location.id,
+                      role: 'ADMIN',
+                      setup_completed: true
+                    }
+                  })
+                  
+                  if (updateError) {
+                    console.error('Error updating user metadata:', updateError)
+                  } else {
+                    console.log('✅ User metadata updated with location_id')
+                  }
+                }
+              }
+            } catch (setupError) {
+              console.error('Error setting up new user:', setupError)
+              // Don't fail the confirmation if setup fails
+            }
+            
             // Redirect to operations dashboard after successful confirmation
             setTimeout(() => {
               navigate('/operations')

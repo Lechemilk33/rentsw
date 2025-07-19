@@ -6,7 +6,7 @@
 import React, { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router'
-import { X, User, Lock, Envelope } from 'phosphor-react'
+import { X, User, Lock, Envelope, MapPin } from 'phosphor-react'
 import { supabase } from '../../lib/supabase'
 
 interface AuthModalProps {
@@ -19,6 +19,8 @@ export function AuthModal({ isOpen, onClose, defaultMode = 'signin' }: AuthModal
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [companyName, setCompanyName] = useState('')
+  const [businessAddress, setBusinessAddress] = useState('')
   const [loading, setLoading] = useState(false)
   const [isSignUp, setIsSignUp] = useState(defaultMode === 'signup')
   const [error, setError] = useState<string | null>(null)
@@ -42,26 +44,93 @@ export function AuthModal({ isOpen, onClose, defaultMode = 'signin' }: AuthModal
       return
     }
 
-    try {
-      const { error } = isSignUp 
-        ? await supabase.auth.signUp({ 
-            email, 
-            password,
-            options: {
-              emailRedirectTo: `${window.location.origin}/auth/confirm`
-            }
-          })
-        : await supabase.auth.signInWithPassword({ email, password })
+    // Additional validation for signup
+    if (isSignUp) {
+      if (!companyName.trim()) {
+        setError('Company name is required')
+        setLoading(false)
+        return
+      }
+      if (!businessAddress.trim()) {
+        setError('Business address is required')
+        setLoading(false)
+        return
+      }
+    }
 
-      if (error) {
-        setError(error.message)
-      } else if (isSignUp) {
+    try {
+      if (isSignUp) {
+        // Step 1: Create the user account
+        const { data: authData, error: authError } = await supabase.auth.signUp({ 
+          email, 
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/confirm`,
+            data: {
+              company_name: companyName.trim(),
+              business_address: businessAddress.trim()
+            }
+          }
+        })
+
+        if (authError) {
+          setError(authError.message)
+          setLoading(false)
+          return
+        }
+
+        // Step 2: Create the location for the new user
+        if (authData.user) {
+          const { data: location, error: locationError } = await supabase
+            .from('locations')
+            .insert([{
+              name: `${companyName.trim().toLowerCase().replace(/\s+/g, '-')}-${authData.user.id.slice(0, 8)}`,
+              display_name: companyName.trim(),
+              address: businessAddress.trim(),
+              phone: '+1 (555) 123-4567', // Default phone
+              email: email,
+              owner_id: authData.user.id
+            }])
+            .select()
+            .single()
+
+          if (locationError) {
+            console.error('Location creation error:', locationError)
+            setError('Account created but failed to set up business location. Please contact support.')
+          } else {
+            // Step 3: Update user metadata with location_id
+            const { error: updateError } = await supabase.auth.updateUser({
+              data: {
+                location_id: location.id,
+                role: 'ADMIN',
+                setup_completed: true
+              }
+            })
+
+            if (updateError) {
+              console.error('User metadata update error:', updateError)
+            }
+
+            console.log('✅ User setup completed:', {
+              user_id: authData.user.id,
+              location_id: location.id,
+              company: companyName
+            })
+          }
+        }
+
         setError(null)
         alert('Account created! Please check your email for a confirmation link.')
         onClose()
       } else {
-        onClose()
-        navigate('/operations')
+        // Sign in
+        const { error } = await supabase.auth.signInWithPassword({ email, password })
+        if (error) {
+          setError(error.message)
+        } else {
+          onClose()
+          navigate('/operations')
+        }
       }
     } catch (err) {
       console.error('Auth error:', err)
@@ -75,6 +144,8 @@ export function AuthModal({ isOpen, onClose, defaultMode = 'signin' }: AuthModal
     setEmail('')
     setPassword('')
     setConfirmPassword('')
+    setCompanyName('')
+    setBusinessAddress('')
     setError(null)
   }
 
@@ -133,6 +204,48 @@ export function AuthModal({ isOpen, onClose, defaultMode = 'signin' }: AuthModal
           )}
 
           <form onSubmit={handleAuth} className="space-y-4">
+            {/* Company Name Field (Sign Up Only) */}
+            {isSignUp && (
+              <div>
+                <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-2">
+                  Company Name
+                </label>
+                <div className="relative">
+                  <User size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    id="companyName"
+                    type="text"
+                    required
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    placeholder="Your Company Name"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Business Address Field (Sign Up Only) */}
+            {isSignUp && (
+              <div>
+                <label htmlFor="businessAddress" className="block text-sm font-medium text-gray-700 mb-2">
+                  Business Address
+                </label>
+                <div className="relative">
+                  <MapPin size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    id="businessAddress"
+                    type="text"
+                    required
+                    value={businessAddress}
+                    onChange={(e) => setBusinessAddress(e.target.value)}
+                    placeholder="123 Business St, City, State"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
